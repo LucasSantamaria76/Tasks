@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  api:
+    container_name: tasks
+    restart: always
+    build: ./server
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+  client:
+    container_name: tasks-app
+    restart: always
+    build: ./client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+  postgres:
+    container_name: tasks-db
+    image: postgres
+    expose: 
+      - "5432"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=passdb
+      - POSTGRES_USER=lucas
+    volumes:
+      - apiDB:/var/lib/postgresql/data
+volumes:
+  apiDB:
